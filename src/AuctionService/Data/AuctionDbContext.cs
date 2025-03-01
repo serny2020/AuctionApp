@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AuctionService.Data;
 
-public class ActionDbContext : DbContext
+public class AuctionDbContext : DbContext
 {
-    public ActionDbContext(DbContextOptions<ActionDbContext> options) : base(options)
+    public AuctionDbContext(DbContextOptions<AuctionDbContext> options) : base(options)
     {
     }
 
