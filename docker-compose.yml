@@ -20,6 +20,13 @@ services:
       - mongodata:/data/db
       # - /var/lib/data/db
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672 #accessing through browser
+
+
 volumes:
   pgdata:
   mongodata:
