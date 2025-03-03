@@ -11,7 +11,7 @@ namespace AuctionService.Entities
         public int? SoldAmount { get; set; }
         public int? CurrentHighBit { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdateAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public DateTime AuctionEnd { get; set; } = DateTime.UtcNow;
         public Status Status { get; set; }
         
