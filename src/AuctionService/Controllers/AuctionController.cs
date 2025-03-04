@@ -60,13 +60,13 @@ public class AuctionsController : ControllerBase
 
         _context.Auctions.Add(auction);
 
-        var result = await _context.SaveChangesAsync() > 0;
-
-        // publish event after saving to the DB with id back
+        // publish event before saving to the DB with id back, now data saved to outbox first then to the DB
+        // this is to ensure that the event is published even if the DB save fails
         var newAuction = _mapper.Map<AuctionDto>(auction);
 
         await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(newAuction));
 
+        var result = await _context.SaveChangesAsync() > 0;
 
 
         if (!result) return BadRequest("Could not save changes to the DB");

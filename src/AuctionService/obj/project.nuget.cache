@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "CIy2a4cK2ks=",
+  "dgSpecHash": "JUpMlHnNBNg=",
   "success": true,
   "projectFilePath": "/workspaces/AuctionApp/src/AuctionService/AuctionService.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "/home/codespace/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/codespace/.nuget/packages/masstransit/8.3.7-develop.2227/masstransit.8.3.7-develop.2227.nupkg.sha512",
     "/home/codespace/.nuget/packages/masstransit.abstractions/8.3.7-develop.2227/masstransit.abstractions.8.3.7-develop.2227.nupkg.sha512",
+    "/home/codespace/.nuget/packages/masstransit.entityframeworkcore/8.3.7-develop.2227/masstransit.entityframeworkcore.8.3.7-develop.2227.nupkg.sha512",
     "/home/codespace/.nuget/packages/masstransit.rabbitmq/8.3.7-develop.2227/masstransit.rabbitmq.8.3.7-develop.2227.nupkg.sha512",
     "/home/codespace/.nuget/packages/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "/home/codespace/.nuget/packages/microsoft.codeanalysis.analyzers/3.3.3/microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",

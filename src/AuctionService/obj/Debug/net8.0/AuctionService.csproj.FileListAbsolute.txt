@@ -112,3 +112,4 @@
 /workspaces/AuctionApp/src/AuctionService/obj/Debug/net8.0/AuctionService.pdb
 /workspaces/AuctionApp/src/AuctionService/obj/Debug/net8.0/AuctionService.genruntimeconfig.cache
 /workspaces/AuctionApp/src/AuctionService/obj/Debug/net8.0/ref/AuctionService.dll
+/workspaces/AuctionApp/src/AuctionService/bin/Debug/net8.0/MassTransit.EntityFrameworkCoreIntegration.dll
