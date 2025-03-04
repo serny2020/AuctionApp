@@ -22,7 +22,7 @@ public class SearchController : ControllerBase
 public async Task<ActionResult<List<Item>>> SearchItems([FromQuery] SearchParams searchParams)
 {
     var query = DB.PagedSearch<Item, Item>();
-
+    query.Sort(x => x.Ascending(a => a.Make)); //BUG: sort on make field first, then sort by created date
     if (!string.IsNullOrEmpty(searchParams.SearchTerm))
     {
         query.Match(Search.Full, searchParams.SearchTerm).SortByTextScore();
@@ -61,3 +61,36 @@ public async Task<ActionResult<List<Item>>> SearchItems([FromQuery] SearchParams
     }
     
 }      
+
+// // implementation without order by and filter by
+
+// public class SearchController : ControllerBase
+// {
+//     [HttpGet]
+//     public async Task<ActionResult<List<Item>>> SearchItems(string searchTerm,
+//         int pageNumber = 1, int pageSize = 4)
+//     {
+//         var query = DB.PagedSearch<Item>();
+//         query.Sort(x => x.Ascending(a => a.Make));
+
+//         if (!string.IsNullOrEmpty(searchTerm))
+//         {
+//             query.Match(Search.Full, searchTerm).SortByTextScore();
+//         }
+
+//         query.PageNumber(pageNumber);
+//         query.PageSize(pageSize);
+//         var result = await query.ExecuteAsync();
+
+//         return Ok(new
+//         {
+//             // Response formatting continues here...
+//             results = result.Results,
+//             pageCount = result.PageCount,
+//             totalCount = result.TotalCount
+//         });
+//     }
+// }
+
+
+

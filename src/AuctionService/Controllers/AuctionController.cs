@@ -91,6 +91,8 @@ public class AuctionsController : ControllerBase
         auction.Item.Mileage = updateAuctionDto.Mileage ?? auction.Item.Mileage;
         auction.Item.Year = updateAuctionDto.Year ?? auction.Item.Year;
 
+        await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(auction)); // publish endpoint if auction is updated
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if (result) return Ok();
@@ -109,11 +111,14 @@ public class AuctionsController : ControllerBase
 
         _context.Auctions.Remove(auction);
 
+        // publish event before saving to the DB with id back, now data saved to outbox first then to the DB
+        // this is to ensure that the event is published even if the DB save fails
+        await _publishEndpoint.Publish<AuctionDeleted>(new { Id = auction.Id.ToString() }); // publish endpoint if auction is deleted
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if (!result) return BadRequest("Could not update DB");
 
         return Ok();
     }
-
 }
