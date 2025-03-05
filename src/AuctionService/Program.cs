@@ -1,6 +1,7 @@
 using AuctionService.Consumers;
 using AuctionService.Data;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,11 +60,37 @@ builder.Services.AddMassTransit(x =>
 //     });
 // });
 
+// Add authentication services to the application's service collection
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        // Set the identity provider (authority) URL where the JWT tokens are issued.
+        // This should be the URL of the identity provider, like IdentityServer or Auth0.
+        options.Authority = builder.Configuration["IdentityServiceUrl"];
+
+        // Disable HTTPS metadata validation.
+        // This is useful for development environments where HTTPS is not enforced.
+        // Currently, the identity provider is using HTTP in the development environment.
+        // In production, it should be set to true.
+        options.RequireHttpsMetadata = false;
+
+        // Disable audience validation.
+        // If enabled, it would check whether the token is meant for this API (matching the audience claim).
+        // Setting this to false means the API will accept tokens without enforcing audience checks.
+        options.TokenValidationParameters.ValidateAudience = false;
+
+        // Specify which claim should be used as the user's name in the token.
+        // Here, we use the claim named "username" to represent the authenticated user’s name.
+        options.TokenValidationParameters.NameClaimType = "username";
+    });
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-app.UseHttpsRedirection();
 
+// Configure the HTTP request pipeline.
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 try

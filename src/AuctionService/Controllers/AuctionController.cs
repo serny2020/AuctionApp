@@ -8,6 +8,8 @@ using AuctionService.Entities;
 using AutoMapper.QueryableExtensions;
 using Contracts;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
@@ -51,13 +53,16 @@ public class AuctionsController : ControllerBase
         return _mapper.Map<AuctionDto>(auction);
     }
 
+    [Authorize] // only authenticated users can create auctions
     [HttpPost]
     public async Task<ActionResult<AuctionDto>> CreateAuction(CreateAuctionDto auctionDto)
     {
         var auction = _mapper.Map<Auction>(auctionDto);
-        // TODO: add current user as seller
-        auction.Seller = "test";
 
+        // NOTE: to run test on postman, authentication port should be 5001
+        auction.Seller = User.Identity?.Name ?? "Unknown user"; // get the username of the authenticated user
+
+        // auction.Seller = "alice";
         _context.Auctions.Add(auction);
 
         // publish event before saving to the DB with id back, now data saved to outbox first then to the DB
@@ -75,6 +80,7 @@ public class AuctionsController : ControllerBase
             new { auction.Id }, newAuction);
     }
 
+    [Authorize] // only authenticated users can update auctions
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateAuction(Guid id, UpdateAuctionDto updateAuctionDto)
     {
@@ -83,7 +89,7 @@ public class AuctionsController : ControllerBase
 
         if (auction == null) return NotFound();
 
-        // TODO: check seller == username
+        if (auction.Seller != User.Identity.Name) return Forbid(); // check if seller is the same as the user
 
         auction.Item.Make = updateAuctionDto.Make ?? auction.Item.Make;
         auction.Item.Model = updateAuctionDto.Model ?? auction.Item.Model;
@@ -100,6 +106,7 @@ public class AuctionsController : ControllerBase
         return BadRequest("Problem saving changes");
     }
 
+    [Authorize] // only authenticated users can delete auctions
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAuction(Guid id)
     {
@@ -107,7 +114,7 @@ public class AuctionsController : ControllerBase
 
         if (auction == null) return NotFound();
 
-        // TODO: check seller == username
+        if (auction.Seller != User.Identity.Name) return Unauthorized(); // check if seller is the same as the user
 
         _context.Auctions.Remove(auction);
 
