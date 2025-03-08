@@ -26,11 +26,17 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    # healthcheck:
+    #   test: ["CMD", "rabbitmqctl", "status"]
+    #   interval: 5s
+    #   timeout: 3s
+    #   retries: 3
     healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
-      interval: 5s
-      timeout: 3s
-      retries: 3
+      test: ["CMD", "rabbitmqctl", "await_startup"]
+      interval: 10s
+      retries: 10
+      start_period: 30s # BUG: ensures that RabbitMQ is fully ready before any service connects. 
+      # the actual message broker may take extra time to fully initialize.
 
   auction-svc:
     image: PuzzledSunrise/auction-svc:latest
@@ -64,12 +70,13 @@ services:
     ports:
       - 7002:80
     depends_on:
-      # rabbitmq:
-      #   condition: service_healthy
-      # mongodb:
-      #   condition: service_healthy
-      - rabbitmq
-      - mongodb
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+        # condition: service_healthy
+      # - rabbitmq
+      # - mongodb
 
   identity-svc:
      image: PuzzledSunrise/identity-svc:latest
@@ -77,6 +84,9 @@ services:
        context: .
        dockerfile: src/IdentityService/Dockerfile
      environment:
+    # Set the ASP.NET Core environment to "Docker"
+    # This allows the application to detect that it is running inside a Docker container
+    # and apply specific configurations accordingly (e.g., setting IssuerUri in IdentityServer)
        - ASPNETCORE_ENVIRONMENT=Docker
        - ASPNETCORE_URLS=http://+:80
        - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgrespw;Database=identity

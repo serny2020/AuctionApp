@@ -22,6 +22,11 @@ builder.Services.AddMassTransit(x =>
     x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search-service", false));
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.Host("rabbitmq", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
         // Configure RabbitMQ host from application configuration settings
         cfg.Host(builder.Configuration["RabbitMq:Host"], "/", host =>
         {
@@ -39,11 +44,6 @@ builder.Services.AddMassTransit(x =>
             e.ConfigureConsumer<AuctionCreatedConsumer>(context);
         });
 
-        cfg.Host("localhost", "/", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
 
         cfg.ConfigureEndpoints(context);
     });

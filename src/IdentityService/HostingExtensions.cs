@@ -29,6 +29,15 @@ internal static class HostingExtensions
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
 
+                // Check if the application is running in the "Docker" environment
+                if (builder.Environment.IsEnvironment("Docker"))
+                {
+                    // Set the IssuerUri explicitly when running inside a Docker container
+                    // This ensures that IdentityServer correctly identifies itself using the given URI
+                    // which is helpful for service discovery and authentication flow within the Docker network.
+                    options.IssuerUri = "http://localhost:5001";
+                }
+
                 // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
                 // options.EmitStaticAudienceClaim = true;
             })
