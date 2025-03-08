@@ -10,9 +10,10 @@ services:
       # - /var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 10s
-      retries: 5
+      # interval: 10s
+      # retries: 5
       start_period: 5s # ensures that PostgreSQL is fully ready before any service connects.
+      # depends_on only ensure a service is started, not that it's ready to accept connections.
 
   mongodb:
     image: mongo
@@ -38,9 +39,9 @@ services:
     #   retries: 3
     healthcheck:
       test: ["CMD", "rabbitmqctl", "await_startup"]
-      interval: 10s
-      retries: 10
-      start_period: 30s # BUG: ensures that RabbitMQ is fully ready before any service connects. 
+      # interval: 10s
+      # retries: 10
+      start_period: 3s # BUG: ensures that RabbitMQ is fully ready before any service connects. 
       # the actual message broker may take extra time to fully initialize.
 
   auction-svc:
