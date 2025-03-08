@@ -36,19 +36,34 @@ builder.Services.AddMassTransit(x =>
         o.UseBusOutbox();
     });
 
+    // Scans the namespace that contains AuctionCreatedFaultConsumer and registers all consumer classes found there.
     x.AddConsumersFromNamespaceContaining<AuctionCreatedFaultConsumer>();
     x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("auction-service", false));
 
+    // Configuring RabbitMQ for message communication
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("localhost", "/", h =>
+        // Configure RabbitMQ host from application configuration settings
+        cfg.Host(builder.Configuration["RabbitMq:Host"], "/", host =>
         {
-            h.Username("guest");
-            h.Password("guest");
+            // Set username from configuration, defaulting to "guest" if not provided
+            host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
+
+            // Set password from configuration, defaulting to "guest" if not provided
+            host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
         });
 
+        // Configure a fallback RabbitMQ host using localhost with default guest credentials
+        // cfg.Host("localhost", "/", h =>
+        // {
+        //     h.Username("guest");
+        //     h.Password("guest");
+        // });
+
+        // Configure endpoints automatically based on consumers found in the application
         cfg.ConfigureEndpoints(context);
     });
+
 });
 
 
