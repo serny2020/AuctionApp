@@ -8,6 +8,11 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       # - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 5s # ensures that PostgreSQL is fully ready before any service connects.
 
   mongodb:
     image: mongo
@@ -93,7 +98,8 @@ services:
      ports:
        - 5001:80
      depends_on:
-       - postgres
+        postgres:
+          condition: service_healthy  # Waits for PostgreSQL to be healthy
 
   # Define the gateway-svc service
   gateway-svc:
