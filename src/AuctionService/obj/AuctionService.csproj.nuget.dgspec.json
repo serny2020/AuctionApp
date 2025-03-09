@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/workspaces/AuctionApp/src/AuctionService/AuctionService.csproj": {}
+    "/home/shawn/AuctionApp/src/AuctionService/AuctionService.csproj": {}
   },
   "projects": {
-    "/workspaces/AuctionApp/src/AuctionService/AuctionService.csproj": {
+    "/home/shawn/AuctionApp/src/AuctionService/AuctionService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspaces/AuctionApp/src/AuctionService/AuctionService.csproj",
+        "projectUniqueName": "/home/shawn/AuctionApp/src/AuctionService/AuctionService.csproj",
         "projectName": "AuctionService",
-        "projectPath": "/workspaces/AuctionApp/src/AuctionService/AuctionService.csproj",
-        "packagesPath": "/home/codespace/.nuget/packages/",
-        "outputPath": "/workspaces/AuctionApp/src/AuctionService/obj/",
+        "projectPath": "/home/shawn/AuctionApp/src/AuctionService/AuctionService.csproj",
+        "packagesPath": "/home/shawn/.nuget/packages/",
+        "outputPath": "/home/shawn/AuctionApp/src/AuctionService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/codespace/.nuget/NuGet/NuGet.Config"
+          "/home/shawn/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -26,8 +26,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/workspaces/AuctionApp/src/Contracts/Contracts.csproj": {
-                "projectPath": "/workspaces/AuctionApp/src/Contracts/Contracts.csproj"
+              "/home/shawn/AuctionApp/src/Contracts/Contracts.csproj": {
+                "projectPath": "/home/shawn/AuctionApp/src/Contracts/Contracts.csproj"
               }
             }
           }
@@ -91,21 +91,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.406/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/workspaces/AuctionApp/src/Contracts/Contracts.csproj": {
+    "/home/shawn/AuctionApp/src/Contracts/Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspaces/AuctionApp/src/Contracts/Contracts.csproj",
+        "projectUniqueName": "/home/shawn/AuctionApp/src/Contracts/Contracts.csproj",
         "projectName": "Contracts",
-        "projectPath": "/workspaces/AuctionApp/src/Contracts/Contracts.csproj",
-        "packagesPath": "/home/codespace/.nuget/packages/",
-        "outputPath": "/workspaces/AuctionApp/src/Contracts/obj/",
+        "projectPath": "/home/shawn/AuctionApp/src/Contracts/Contracts.csproj",
+        "packagesPath": "/home/shawn/.nuget/packages/",
+        "outputPath": "/home/shawn/AuctionApp/src/Contracts/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/codespace/.nuget/NuGet/NuGet.Config"
+          "/home/shawn/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -149,7 +149,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.406/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
