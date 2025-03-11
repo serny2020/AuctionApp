@@ -1,4 +1,5 @@
 import React from 'react'
+import AuctionCard from './AuctionCard';
 
 
 /**
@@ -19,7 +20,7 @@ import React from 'react'
  * @throws {Error} If the request fails (e.g., server error or network issue).
  */
 async function getData() {
-    const res = await fetch('http://localhost:6001/search', {
+    const res = await fetch('http://localhost:6001/search?PageSize=10', {
         cache: 'force-cache', // cache the response for better performance
         headers: {
             // Allows caching for 1 hour while allowing revalidation.
@@ -36,8 +37,11 @@ async function getData() {
 export default async function Listings() {
     const data = await getData();
   return (
-    <div>
-        {JSON.stringify(data, null, 2)}
+    <div className='grid grid-cols-4 gap-6'>
+        {/* {JSON.stringify(data, null, 2)} */}
+        {data && data.results.map((auction: any) => (
+            <AuctionCard key={auction.id} auction={auction} />
+        ))}
     </div>
   )
 }
