@@ -1,4 +1,5 @@
 import "./globals.css";
+import Navbar from "./nav/Navbar";
 
 export const metadata = {
   title: "Auction App",
@@ -13,7 +14,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <Navbar/>
+          <main className='container mx-auto px-5 pt-10'>
+            {children}
+          </main>
       </body>
     </html>
   );
