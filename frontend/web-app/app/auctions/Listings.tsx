@@ -1,5 +1,6 @@
 import React from 'react'
 import AuctionCard from './AuctionCard';
+import { Auction, PagedResult } from '../types';
 
 
 /**
@@ -19,7 +20,7 @@ import AuctionCard from './AuctionCard';
  * @returns {Promise<any>} A promise that resolves to the JSON response from the API.
  * @throws {Error} If the request fails (e.g., server error or network issue).
  */
-async function getData() {
+async function getData(): Promise<PagedResult<Auction>> {
     const res = await fetch('http://localhost:6001/search?PageSize=10', {
         cache: 'force-cache', // cache the response for better performance
         headers: {
@@ -39,7 +40,7 @@ export default async function Listings() {
   return (
     <div className='grid grid-cols-4 gap-6'>
         {/* {JSON.stringify(data, null, 2)} */}
-        {data && data.results.map((auction: any) => (
+        {data && data.results.map((auction) => (
             <AuctionCard key={auction.id} auction={auction} />
         ))}
     </div>
