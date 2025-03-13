@@ -1,48 +1,50 @@
-import React from 'react'
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import AuctionCard from './AuctionCard';
 import { Auction, PagedResult } from '../types';
+import AppPagination from '../components/AppPagination';
+import { getData } from '../actions/auctionActions';
 
 
-/**
- * Fetches data from the search API at 'http://localhost:6001/search'.
- *
- * This function makes a GET request to the given API endpoint and applies caching
- * for optimized performance. It uses `cache: 'force-cache'`, which enables caching
- * to reduce redundant network requests.
- *
- * Caching Policy:
- * - `Cache-Control: public, max-age=3600, stale-while-revalidate=59`
- *   - The response is cached for 1 hour (`max-age=3600`).
- *   - During revalidation, stale data can be used while fetching fresh data in the gateway service (`stale-while-revalidate=59`).
- *
- * If the request fails, an error is thrown.
- *
- * @returns {Promise<any>} A promise that resolves to the JSON response from the API.
- * @throws {Error} If the request fails (e.g., server error or network issue).
- */
-async function getData(): Promise<PagedResult<Auction>> {
-    const res = await fetch('http://localhost:6001/search?PageSize=10', {
-        cache: 'force-cache', // cache the response for better performance
-        headers: {
-            // Allows caching for 1 hour while allowing revalidation.
-            'Cache-Control': 'public, max-age=3600, stale-while-revalidate=59',
-        },
-    });
 
-    if (!res.ok) throw new Error('Failed to fetch data');
+export default function Listings() {
+    const [auctions, setAuctions] = useState<Auction[]>([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [pageNumber, setPageNumber] = useState(1);
 
-    return res.json();
-}
+    // Fetch data when the component mounts or pageNumber changes
+    useEffect(() => {
+        async function fetchAuctions() {
+            try {
+                const data = await getData(pageNumber);
+                setAuctions(data.results);
+                setPageCount(data.pageCount);
+            } catch (error) {
+                console.error("Error fetching auctions:", error);
+            }
+        }
+        fetchAuctions();
+    }, [pageNumber]);
 
+    if (auctions.length === 0) return <h3>Loading...</h3>;
 
-export default async function Listings() {
-    const data = await getData();
-  return (
-    <div className='grid grid-cols-4 gap-6'>
-        {/* {JSON.stringify(data, null, 2)} */}
-        {data && data.results.map((auction) => (
-            <AuctionCard key={auction.id} auction={auction} />
-        ))}
-    </div>
-  )
+    return (
+        <>
+            <div className='grid grid-cols-4 gap-6'>
+                {auctions.map((auction) => (
+                    <AuctionCard auction={auction} key={auction.id} />
+                ))}
+            </div>
+
+            {/* Pagination Component */}
+            <div className='flex justify-center mt-4'>
+                <AppPagination 
+                    currentPage={pageNumber} 
+                    pageCount={pageCount} 
+                    onPageChange={setPageNumber} // Updates page number on click
+                />
+            </div>
+        </>
+    );
 }

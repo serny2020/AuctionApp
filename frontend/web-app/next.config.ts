@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   logging: {
     fetches: {
       fullUrl: true
-    }
+    },
   },
   images: {
     remotePatterns: [
