@@ -22,7 +22,10 @@ public class SearchController : ControllerBase
 public async Task<ActionResult<List<Item>>> SearchItems([FromQuery] SearchParams searchParams)
 {
     var query = DB.PagedSearch<Item, Item>();
-    query.Sort(x => x.Ascending(a => a.Make)); //BUG: sort on make field first, then sort by created date
+    // Sorting by "make" in the line below is only for passing the Postman test, which requires all items to be in alphabetical order.
+    // The frontend ordering functionality should rely solely on the query statement.
+    // First run `docker-compose up -d --build` to apply the changes. Then, disable caching in Next.js.
+    // query.Sort(x => x.Ascending(a => a.Make)); //BUG: sort on make field first, then sort by created date
     if (!string.IsNullOrEmpty(searchParams.SearchTerm))
     {
         query.Match(Search.Full, searchParams.SearchTerm).SortByTextScore();

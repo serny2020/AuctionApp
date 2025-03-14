@@ -20,11 +20,11 @@ import { Auction, PagedResult } from "../types";
  */
 export async function getData(query: string): Promise<PagedResult<Auction>> {
     const res = await fetch(`http://localhost:6001/search${query}`, {
-        cache: 'force-cache', // cache the response for better performance
-        headers: {
-            // Allows caching for 1 hour while allowing revalidation.
-            'Cache-Control': 'public, max-age=3600, stale-while-revalidate=59',
-        },
+        // cache: 'force-cache', // cache the response for better performance
+        // headers: {
+        //     // Allows caching for 1 hour while allowing revalidation.
+        //     'Cache-Control': 'public, max-age=3600, stale-while-revalidate=59',
+        // },
     });
 
     if (!res.ok) throw new Error('Failed to fetch data');
