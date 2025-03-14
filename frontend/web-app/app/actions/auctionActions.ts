@@ -18,8 +18,8 @@ import { Auction, PagedResult } from "../types";
  * @returns {Promise<any>} A promise that resolves to the JSON response from the API.
  * @throws {Error} If the request fails (e.g., server error or network issue).
  */
-export async function getData(pageNumber: number=1): Promise<PagedResult<Auction>> {
-    const res = await fetch(`http://localhost:6001/search?PageSize=4&pageNumber=${pageNumber}`, {
+export async function getData(pageNumber: number, pageSize: number): Promise<PagedResult<Auction>> {
+    const res = await fetch(`http://localhost:6001/search?PageSize=${pageSize}&pageNumber=${pageNumber}`, {
         cache: 'force-cache', // cache the response for better performance
         headers: {
             // Allows caching for 1 hour while allowing revalidation.
