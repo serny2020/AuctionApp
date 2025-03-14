@@ -6,12 +6,14 @@ import { create } from "zustand"
      pageSize: number
      pageCount: number
      searchTerm: string
+     searchValue: string
  }
  
  // Define the structure of actions that modify the state
  type Actions = {
      setParams: (params: Partial<State>) => void
      reset: () => void
+     setSearchValue: (value: string) => void
  }
  
  // Define the initial state values
@@ -20,6 +22,7 @@ import { create } from "zustand"
      pageSize: 12,
      pageCount: 1,
      searchTerm: '',
+     searchValue: '',
  }
  
 // Create a Zustand store to manage pagination state and actions
@@ -34,8 +37,8 @@ export const useParamsStore = create<State & Actions>()((set) => ({
                 return { ...state, pageNumber: newParams.pageNumber }
             } else {
                 // Otherwise, update all provided parameters but reset pageNumber to 1
-                // This avoid fetching items doesn't exist on last page if with filtering 
-                // options more than what it has. 
+                // This avoid fetching items doesn't exist on the page that filtering 
+                // options more than what we have. 
                 return { ...state, ...newParams, pageNumber: 1 }
             }
         })
@@ -45,4 +48,7 @@ export const useParamsStore = create<State & Actions>()((set) => ({
     reset: () => {
         set(initialState)
     },
+    setSearchValue: (value: string) => {
+        set({searchValue: value})
+    }
 }))
