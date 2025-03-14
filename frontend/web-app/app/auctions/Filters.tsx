@@ -1,13 +1,14 @@
 import React from 'react';
+import { useParamsStore } from '../hooks/useParamsStore';
 
-type Props = {
-  pageSize: number;
-  setPageSize: (size: number) => void;
-};
 
 const pageSizeButtons = [4, 8, 12];
 
-export default function Filters({ pageSize, setPageSize }: Props) {
+export default function Filters() {
+
+  const pageSize = useParamsStore(state => state.pageSize);
+  const setParams = useParamsStore(state => state.setParams);
+  
   return (
     <div className="flex justify-between items-center mb-4">
       <div>
@@ -16,7 +17,7 @@ export default function Filters({ pageSize, setPageSize }: Props) {
           {pageSizeButtons.map((value, i) => (
             <button
               key={i}
-              onClick={() => setPageSize(value)}
+              onClick={() => setParams({pageSize: value})}
               className={`px-4 py-2 text-sm font-medium rounded-md border transition-colors ${
                 pageSize === value
                   ? 'bg-red-500 text-white border-red-500'
