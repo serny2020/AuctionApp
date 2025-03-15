@@ -39,9 +39,21 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                 RequirePkce = false,
                 RedirectUris = {"http://localhost:3000/api/auth/callback/id-server"},
+
+                // Allows the client to receive refresh tokens for offline access.
                 AllowOfflineAccess = true,
-                AllowedScopes = {"openid", "profile", "auctionApp"},
-                AccessTokenLifetime = 3600*24*30
+
+                // Specifies the scopes that the client is allowed to request.
+                // 'openid' and 'profile' are standard OpenID Connect scopes.
+                AllowedScopes = { "openid", "profile", "auctionApp" },
+
+                // Sets the access token lifetime in seconds.
+                // 3600 seconds/hour * 24 hours/day * 30 days = 30 days token lifetime.
+                AccessTokenLifetime = 3600 * 24 * 30,
+
+                // Ensures that user claims are always included in the ID token,
+                // so that additional requests to the user info endpoint are not required.
+                AlwaysIncludeUserClaimsInIdToken = true
             }
         };
 }
