@@ -8,6 +8,7 @@ import { create } from "zustand"
      searchTerm: string
      searchValue: string
      orderBy: string,
+     filterBy: string,
  }
  
  // Define the structure of actions that modify the state
@@ -25,6 +26,7 @@ import { create } from "zustand"
      searchTerm: '',
      searchValue: '',
      orderBy: 'make',
+     filterBy: 'live',
  }
  
 // Create a Zustand store to manage pagination state and actions
