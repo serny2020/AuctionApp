@@ -42,7 +42,7 @@ export default function UserActions({ user }: Props) {
           </Link>
 
           {/* Sell my car */}
-          <Link href="/">
+          <Link href="/auctions/create">
             <div className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer">
               <AiFillCar className="mr-2" />
               Sell my car
