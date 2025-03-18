@@ -60,6 +60,8 @@ export default function UserActions({ user }: Props) {
           <div className="border-t border-gray-200 my-1" />
 
           {/* Sign out */}
+          {/* This sign out doesn't affect sign in status of Identity server, and signOut function is
+              a client side function. User will be redirected to homePage after signOut. */}
           <button
             onClick={() => signOut({ callbackUrl: '/' })}
             className="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100"

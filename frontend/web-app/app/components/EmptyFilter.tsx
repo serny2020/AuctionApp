@@ -3,17 +3,22 @@
 import { useParamsStore } from '../hooks/useParamsStore'
 import React from 'react'
 import Heading from './Heading'
+import { signIn } from 'next-auth/react'
 
 type Props = {
     title?: string
     subtitle?: string
     showReset?: boolean
+    showLogin?: boolean
+    callbackUrl?: boolean
 }
 
 export default function EmptyFilter({
     title = 'No matches for this filter',
     subtitle = 'Try changing or resetting the filter',
-    showReset
+    showReset,
+    showLogin,
+    callbackUrl
 }: Props) {
     const reset = useParamsStore(state => state.reset);
 
@@ -30,6 +35,15 @@ export default function EmptyFilter({
                          text-gray-700 rounded hover:bg-gray-100 focus:outline-none"
                     >
                         Remove filters
+                    </button>
+                )}
+                {showLogin && (
+                    <button
+                        onClick={()=>signIn('id-server', {callbackUrl})}
+                        className="px-4 py-2 border border-gray-300
+                         text-gray-700 rounded hover:bg-gray-100 focus:outline-none"
+                    >
+                        Login
                     </button>
                 )}
             </div>
