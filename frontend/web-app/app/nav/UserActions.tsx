@@ -3,16 +3,32 @@
 import { User } from 'next-auth'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { AiFillCar, AiFillTrophy, AiOutlineLogout } from 'react-icons/ai'
 import { HiCog, HiUser } from 'react-icons/hi2'
+import { useParamsStore } from '../hooks/useParamsStore'
 
 type Props = {
-  user: Partial<User>
+  user: User
 }
 
 export default function UserActions({ user }: Props) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const setParams = useParamsStore(state => state.setParams);
+
+  function setWinner() {
+    setParams({ winner: user.username, seller: undefined })
+    if (pathname !== '/') router.push('/');
+  }
+
+  function setSeller() {
+    setParams({ seller: user.username, winner: undefined })
+    if (pathname !== '/') router.push('/');
+  }
 
   return (
     <div className="relative">
@@ -26,20 +42,20 @@ export default function UserActions({ user }: Props) {
       {open && (
         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
           {/* My Auctions */}
-          <Link href="/">
-            <div className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer">
-              <HiUser className="mr-2" />
-              My Auctions
-            </div>
-          </Link>
+          <div className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+            onClick={setSeller}>
+            <HiUser className="mr-2" />
+            My Auctions
+          </div>
 
           {/* Auctions won */}
-          <Link href="/">
-            <div className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer">
-              <AiFillTrophy className="mr-2" />
-              Auctions won
-            </div>
-          </Link>
+
+          <div className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+            onClick={setWinner}>
+            <AiFillTrophy className="mr-2" />
+            Auctions won
+          </div>
+
 
           {/* Sell my car */}
           <Link href="/auctions/create">
