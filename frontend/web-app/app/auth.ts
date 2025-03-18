@@ -22,6 +22,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
         async jwt({ token, user, account, profile }) {
             //   console.log({ token, user, account, profile })
+            if (account && account.access_token) {
+                token.accessToken = account.access_token; // Store the access token in the session
+            }
             if (profile) {
                 token.username = profile.username;
             }
@@ -31,6 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             console.log({ session, token, user })
             if (token) {
                 session.user.username = token.username;
+                session.accessToken = token.accessToken
             }
             return session;
         }

@@ -1,4 +1,5 @@
 'use server' // Ensure this always runs on the server side  
+import { auth } from "../auth";
 import { Auction, PagedResult } from "../types";
 
 /**
@@ -30,4 +31,34 @@ export async function getData(query: string): Promise<PagedResult<Auction>> {
     if (!res.ok) throw new Error('Failed to fetch data');
 
     return res.json();
+}
+
+/**
+ * Test function to see if we can access and store the access token.
+ * We can then store the access token in the session to make authenticated requests
+ * to API endpoint in the future.
+ * @returns 
+ */
+export async function updateAuctionTest() {
+    const data = {
+        mileage: Math.floor(Math.random() * 10000) + 1
+    }
+
+    const session = await auth();
+
+    // Make a PUT request to the API endpoint 
+    // with stored access token in the session
+    const res = await fetch('http://localhost:6001/auctions/bbab4d5a-8565-48b1-9450-5ac2a5c4a654', {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': 'Bearer ' + session?.accessToken
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!res.ok) return {status: res.status, message: res.statusText}
+
+    return res.statusText;
+    // return res.json();
 }
