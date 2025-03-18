@@ -4,6 +4,7 @@ import Search from './Search';
 import LoginButton from './LogInButton';
 import { getCurrentUser } from '../actions/authActions';
 import UserActions from './UserAuctions';
+import { use } from 'react';
 
 export default async function Navbar() {
   const user = await getCurrentUser();
@@ -11,7 +12,7 @@ export default async function Navbar() {
     <header className='sticky top-0 z-50 flex justify-between bg-white shadow-md py-5 px-5 items-center text-gray-800'>
       <Logo/>
       <Search/>
-      {user ? <UserActions/> : <LoginButton/>}
+      {user ? <UserActions user={user}/> : <LoginButton/>}
     </header>
   )
 }

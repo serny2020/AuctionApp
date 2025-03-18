@@ -25,8 +25,8 @@ public class SeedData
         {
             alice = new ApplicationUser
             {
-                UserName = "alice",
-                Email = "AliceSmith@email.com",
+                UserName = "shawn",
+                Email = "apple.splandy@gmail.com",
                 EmailConfirmed = true,
             };
             var result = userMgr.CreateAsync(alice, "Pass123$").Result;
