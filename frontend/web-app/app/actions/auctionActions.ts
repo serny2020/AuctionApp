@@ -1,5 +1,7 @@
 'use server' // Ensure this always runs on the server side  
+import { FieldValues } from "react-hook-form";
 import { auth } from "../auth";
+import { fetchWrapper } from "../lib/fetchWrapper";
 import { Auction, PagedResult } from "../types";
 
 /**
@@ -20,17 +22,18 @@ import { Auction, PagedResult } from "../types";
  * @throws {Error} If the request fails (e.g., server error or network issue).
  */
 export async function getData(query: string): Promise<PagedResult<Auction>> {
-    const res = await fetch(`http://localhost:6001/search${query}`, {
-        // cache: 'force-cache', // cache the response for better performance
-        // headers: {
-        //     // Allows caching for 1 hour while allowing revalidation.
-        //     'Cache-Control': 'public, max-age=3600, stale-while-revalidate=59',
-        // },
-    });
+    // const res = await fetch(`http://localhost:6001/search${query}`, {
+    //     // cache: 'force-cache', // cache the response for better performance
+    //     // headers: {
+    //     //     // Allows caching for 1 hour while allowing revalidation.
+    //     //     'Cache-Control': 'public, max-age=3600, stale-while-revalidate=59',
+    //     // },
+    // });
 
-    if (!res.ok) throw new Error('Failed to fetch data');
+    // if (!res.ok) throw new Error('Failed to fetch data');
 
-    return res.json();
+    // return res.json();
+    return await fetchWrapper.get(`search${query}`);
 }
 
 /**
@@ -44,21 +47,27 @@ export async function updateAuctionTest() {
         mileage: Math.floor(Math.random() * 10000) + 1
     }
 
-    const session = await auth();
+    // const session = await auth();
 
-    // Make a PUT request to the API endpoint 
-    // with stored access token in the session
-    const res = await fetch('http://localhost:6001/auctions/bbab4d5a-8565-48b1-9450-5ac2a5c4a654', {
-        method: 'PUT',
-        headers: {
-            'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + session?.accessToken
-        },
-        body: JSON.stringify(data)
-    });
+    // // Make a PUT request to the API endpoint 
+    // // with stored access token in the session
+    // const res = await fetch('http://localhost:6001/auctions/bbab4d5a-8565-48b1-9450-5ac2a5c4a654', {
+    //     method: 'PUT',
+    //     headers: {
+    //         'Content-type': 'application/json',
+    //         'Authorization': 'Bearer ' + session?.accessToken
+    //     },
+    //     body: JSON.stringify(data)
+    // });
 
-    if (!res.ok) return {status: res.status, message: res.statusText}
+    // if (!res.ok) return {status: res.status, message: res.statusText}
 
-    return res.statusText;
+    // return res.statusText;
     // return res.json();
+
+    return await fetchWrapper.put('auctions/bbab4d5a-8565-48b1-9450-5ac2a5c4a654', data);
+}
+
+export async function createAuction(data: FieldValues) {
+    return await fetchWrapper.post('auctions', data);
 }

@@ -25,7 +25,7 @@ public class SeedData
         {
             alice = new ApplicationUser
             {
-                UserName = "shawn",
+                UserName = "alice",
                 Email = "apple.splandy@gmail.com",
                 EmailConfirmed = true,
             };

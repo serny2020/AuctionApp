@@ -4,21 +4,35 @@ import { FieldValues, useForm } from "react-hook-form";
 import Input from "../components/input";
 import { useEffect } from "react";
 import DateInput from "../components/DateInput";
+import { useRouter } from "next/navigation";
+import { createAuction } from "../actions/auctionActions";
 
 export default function AuctionForm() {
+  const router = useRouter();
+
   const {
     control,
     handleSubmit,
     setFocus,
-    formState: { isSubmitting, isValid, isDirty, errors }
+    formState: { isSubmitting, isValid }
   } = useForm({ mode: 'onTouched' });
 
   useEffect(() => {
     setFocus('make');
   }, [setFocus])
 
-  function onSubmit(data: FieldValues) {
-    console.log(data);
+  async function onSubmit(data: FieldValues) {
+    // console.log(data);
+    try {
+      const res = await createAuction(data);
+
+      if (res.error) {
+        throw res.error;
+      }
+      router.push(`/auctions/details/${res.id}`)
+    } catch (error: any) {
+      console.log(error)
+    }
   }
 
   return (
@@ -65,7 +79,7 @@ export default function AuctionForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          // disabled={!isValid || isSubmitting}
+          disabled={!isValid || isSubmitting}
           className={`px-4 py-2 border rounded-md ${isSubmitting
             ? "bg-green-500 text-white opacity-50 cursor-not-allowed"
             : "bg-green-500 text-white hover:bg-green-600"
