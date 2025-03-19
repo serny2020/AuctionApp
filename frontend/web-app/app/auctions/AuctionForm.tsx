@@ -1,13 +1,21 @@
 'use client'
 
 import { FieldValues, useForm } from "react-hook-form";
+import Input from "../components/input";
+import { useEffect } from "react";
+import DateInput from "../components/DateInput";
 
 export default function AuctionForm() {
   const {
-    register,
+    control,
     handleSubmit,
+    setFocus,
     formState: { isSubmitting, isValid, isDirty, errors }
-  } = useForm();
+  } = useForm({ mode: 'onTouched' });
+
+  useEffect(() => {
+    setFocus('make');
+  }, [setFocus])
 
   function onSubmit(data: FieldValues) {
     console.log(data);
@@ -15,38 +23,34 @@ export default function AuctionForm() {
 
   return (
     <form className="flex flex-col mt-3" onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-3">
-        <input
-          {...register("make", { required: "Make is required" })}
-          placeholder="Make"
-          className={`w-full p-2 border ${errors?.make ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 ${errors?.make
-              ? "focus:ring-red-500"
-              : "focus:ring-blue-500"
-            }`}
-        />
-        {errors.make && (
-          <p className="mt-1 text-sm text-red-500">
-            {errors.make.message as string}
-          </p>
-        )}
+      <Input label='Make' name='make' control={control}
+        rules={{ required: 'Make is required' }} />
+      <Input label='Model' name='model' control={control}
+        rules={{ required: 'Model is required' }} />
+      <Input label='Color' name='color' control={control}
+        rules={{ required: 'Color is required' }} />
+
+      <div className='grid grid-cols-2 gap-3'>
+        <Input label='Year' name='year' control={control} type='number'
+          rules={{ required: 'Year is required' }} />
+        <Input label='Mileage' name='mileage' control={control} type='number'
+          rules={{ required: 'Model is required' }} />
       </div>
 
-      <div className="mb-3">
-        <input
-          {...register("model", { required: "Make is required" })}
-          placeholder="Model"
-          className={`w-full p-2 border ${errors?.make ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 ${errors?.make
-              ? "focus:ring-red-500"
-              : "focus:ring-blue-500"
-            }`}
-        />
-        {errors.make && (
-          <p className="mt-1 text-sm text-red-500">
-            {errors.make.message as string}
-          </p>
-        )}
+      <Input label='Image URL' name='imageUrl' control={control}
+        rules={{ required: 'Image URL is required' }} />
+
+      <div className='grid grid-cols-2 gap-3'>
+        <Input label='Reserve Price (enter 0 if no reserve)'
+          name='reservePrice' control={control} type='number'
+          rules={{ required: 'Reserve price is required' }} />
+        <DateInput
+          label='Auction end date/time'
+          name='auctionEnd'
+          control={control}
+          dateFormat='dd MMMM yyyy h:mm a'
+          showTimeSelect
+          rules={{ required: 'Auction end date is required' }} />
       </div>
 
       <div className="flex justify-between">
@@ -63,8 +67,8 @@ export default function AuctionForm() {
           type="submit"
           // disabled={!isValid || isSubmitting}
           className={`px-4 py-2 border rounded-md ${isSubmitting
-              ? "bg-green-500 text-white opacity-50 cursor-not-allowed"
-              : "bg-green-500 text-white hover:bg-green-600"
+            ? "bg-green-500 text-white opacity-50 cursor-not-allowed"
+            : "bg-green-500 text-white hover:bg-green-600"
             } focus:outline-none focus:ring-2 focus:ring-green-400`}
         >
           {isSubmitting ? "Submitting..." : "Submit"}
