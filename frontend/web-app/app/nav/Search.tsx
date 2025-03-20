@@ -1,9 +1,12 @@
 'use client'
 
+import { usePathname, useRouter } from 'next/navigation';
 import { useParamsStore } from '../hooks/useParamsStore'
 import {FaSearch} from 'react-icons/fa'
 
 export default function Search() {
+    const router = useRouter();
+    const pathname = usePathname();
     const setParams = useParamsStore(state => state.setParams);
     const setSearchValue = useParamsStore(state => state.setSearchValue);
     const searchValue = useParamsStore(state => state.searchValue);
@@ -13,6 +16,8 @@ export default function Search() {
     }
 
     function search() {
+        if (pathname !== '/') router.push('/'); // if not on home page after creating a 
+        // new auction, go to home page
         setParams({searchTerm: searchValue});
     }
 
