@@ -51,7 +51,7 @@ export default function AuctionForm({ auction }: Props) {
       if (res.error) {
         throw res.error;
       }
-      router.push(`/auctions/details/${id}`)
+      router.push(`/auctions/details/${res.id}`)
     } catch (error: any) {
       // console.log(error)
       toast.error(error.status + ' ' + error.message)

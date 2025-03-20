@@ -31,7 +31,7 @@ builder.Services.AddMassTransit(x =>
     x.AddEntityFrameworkOutbox<AuctionDbContext>(
     o =>
     {
-        o.QueryDelay = TimeSpan.FromSeconds(10);
+        o.QueryDelay = TimeSpan.FromSeconds(5);
         o.UsePostgres();
         o.UseBusOutbox();
     });
