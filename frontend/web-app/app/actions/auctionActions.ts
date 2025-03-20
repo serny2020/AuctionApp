@@ -80,3 +80,7 @@ export async function updateAuction(data: FieldValues, id: string) {
     const res = await fetchWrapper.put(`auctions/${id}`, data);
     return res;
 }
+
+export async function deleteAuction(id: string) {
+    return await fetchWrapper.del(`auctions/${id}`);
+}
