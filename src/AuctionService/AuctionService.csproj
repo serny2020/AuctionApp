@@ -24,4 +24,8 @@
     <Protobuf Include="protos/auctions.proto" GrpcServices="Server" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Service/" />
+  </ItemGroup>
+
 </Project>
