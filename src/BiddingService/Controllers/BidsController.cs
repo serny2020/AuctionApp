@@ -1,9 +1,9 @@
 using AutoMapper;
 using BiddingService.DTOs;
 using BiddingService.Models;
+using BiddingService.Services;
 using Contracts;
 using MassTransit;
-using MassTransit.Transports;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Entities;
@@ -16,11 +16,13 @@ public class BidsController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly GrpcAuctionClient _grpcClient;
 
-    public BidsController(IMapper mapper, IPublishEndpoint publishEndpoint)
+    public BidsController(IMapper mapper, IPublishEndpoint publishEndpoint, GrpcAuctionClient grpcClient)
     {
         _mapper = mapper;
         _publishEndpoint = publishEndpoint;
+        _grpcClient = grpcClient;
     }
     
     [Authorize]
@@ -31,8 +33,10 @@ public class BidsController : ControllerBase
 
         if (auction == null)
         {
-            // TODO: grpc check with auction service if that has auction 
-            return NotFound();
+            // If the auction does not exist in the local database, call the gRPC service to get it
+            auction = _grpcClient.GetAuction(auctionId);
+
+            if (auction == null) return BadRequest("Cannot accept bids on this auction at this time");
         }
 
         if (auction.Seller == User.Identity.Name)
