@@ -30,7 +30,8 @@ public class AuctionFinishedConsumer : IConsumer<AuctionFinished> // Implements 
         Console.WriteLine("--> Consuming auction finished"); // Logging the event consumption.
 
         // Retrieve the auction record from the database using the provided AuctionId.
-        var auction = await _dbContext.Auctions.FindAsync(context.Message.AuctionId);
+        // NOTE: FindAsync requires a Guid type for the primary key.
+        var auction = await _dbContext.Auctions.FindAsync(Guid.Parse(context.Message.AuctionId));
 
         // If the item was sold, update the winner and the sold amount.
         if (context.Message.ItemSold)

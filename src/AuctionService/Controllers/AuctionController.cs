@@ -53,6 +53,7 @@ public class AuctionsController : ControllerBase
         return _mapper.Map<AuctionDto>(auction);
     }
 
+
     [Authorize] // only authenticated users can create auctions
     [HttpPost]
     public async Task<ActionResult<AuctionDto>> CreateAuction(CreateAuctionDto auctionDto)

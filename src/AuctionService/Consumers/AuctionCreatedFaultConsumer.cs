@@ -19,7 +19,7 @@ namespace AuctionService.Consumers
         /// <param name="context">The context containing the fault message and exception details.</param>
         public async Task Consume(ConsumeContext<Fault<AuctionCreated>> context)
         {
-            System.Console.WriteLine("--> AuctionCreatedFaultConsumer: AuctionCreatedFaultConsumer");
+            Console.WriteLine("--> AuctionCreatedFaultConsumer: AuctionCreatedFaultConsumer");
 
             // Retrieve the first exception from the fault message.
             var exception = context.Message.Exceptions.First();
