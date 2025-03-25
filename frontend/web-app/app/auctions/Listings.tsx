@@ -10,10 +10,12 @@ import { useShallow } from 'zustand/react/shallow';
 import { useParamsStore } from '../hooks/useParamsStore';
 import qs from 'query-string';
 import EmptyFilter from '../components/EmptyFilter';
+import { useAuctionStore } from '../hooks/useAuctionStore';
 
 
 export default function Listings() {
-    const [data, setData] = useState<PagedResult<Auction>>();
+    // const [data, setData] = useState<PagedResult<Auction>>();
+    const [loading, setLoading] = useState(true);
     const params = useParamsStore(useShallow(state => ({
         pageNumber: state.pageNumber,
         pageSize: state.pageSize,
@@ -24,6 +26,15 @@ export default function Listings() {
         winner: state.winner,
     })));
 
+    // useShawllow performs a shallow comparison to avoid 
+    // unnecessary re-renders if the selected state object hasn't changed.
+    const data = useAuctionStore(useShallow(state => ({
+        auctions: state.auctions,
+        totalCount: state.totalCount,
+        pageCount: state.pageCount
+    })));
+    const setData = useAuctionStore(state => state.setData);
+
     const setParams = useParamsStore(state => state.setParams);
     const url = qs.stringifyUrl({ url: '', query: params });
 
@@ -32,14 +43,15 @@ export default function Listings() {
     }
 
     useEffect(() => {
-        getData(url).then((data) => {
-            setData(data)
-        });
-    }, [url]);
+        getData(url).then(data => {
+            setData(data);
+            setLoading(false);
+        })
+    }, [url])
 
 
     // If 'data' is not yet loaded.
-    if (!data) return <h3>Loading...</h3>;
+    if (loading) return <h3>Loading...</h3>;
     // If 'data' is loaded but contains no items,
     // display the EmptyFilter component with the reset option enabled.
 
@@ -57,7 +69,7 @@ export default function Listings() {
                     {/* Display a grid of auction cards */}
                     <div className="grid grid-cols-4 gap-6">
                         {/* Map through the list of auction results and render an AuctionCard for each */}
-                        {data.results.map((auction) => (
+                        {data.auctions.map((auction) => (
                             <AuctionCard auction={auction} key={auction.id} />
                         ))}
                     </div>

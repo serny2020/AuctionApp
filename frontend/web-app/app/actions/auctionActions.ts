@@ -2,7 +2,7 @@
 import { FieldValues } from "react-hook-form";
 import { auth } from "../auth";
 import { fetchWrapper } from "../lib/fetchWrapper";
-import { Auction, PagedResult } from "../types";
+import { Auction, Bid, PagedResult } from "../types";
 
 /**
  * Fetches data from the search API at 'http://localhost:6001/search'.
@@ -83,4 +83,8 @@ export async function updateAuction(data: FieldValues, id: string) {
 
 export async function deleteAuction(id: string) {
     return await fetchWrapper.del(`auctions/${id}`);
+}
+
+export async function getBidsForAuction(id: string): Promise<Bid[]> {
+    return await fetchWrapper.get(`bids/${id}`);
 }
