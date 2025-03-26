@@ -7,24 +7,26 @@ import DetailedSpecs from '../DetailedSpecs';
 import { getCurrentUser } from '@/app/actions/authActions';
 import EditButton from './EditButton';
 import DeleteButton from './DeleteButton';
+import BidItem from './BidItem';
+import BidList from './BidList';
 
 export default async function Details({ params }: { params: { id: string } }) {
   const data = await getDetailedViewData(params.id);
   const user = await getCurrentUser();
   const bids = await getBidsForAuction(params.id);
-  
+
   return (
     <div>
       <div className='flex justify-between'>
         <div className='flex items-center gap-3'>
           <Heading title={`${data.make} ${data.model}`} subtitle={''} />
           {user?.username === data.seller && (
-                        <>
-                            <EditButton id={data.id} />
-                            <DeleteButton id={data.id} />
-                        </>
+            <>
+              <EditButton id={data.id} />
+              <DeleteButton id={data.id} />
+            </>
 
-                    )}
+          )}
         </div>
 
         <div className='flex gap-3'>
@@ -38,14 +40,9 @@ export default async function Details({ params }: { params: { id: string } }) {
           <CarImage imageUrl={data.imageUrl} />
         </div>
 
-        <div className='border-2 rounded-lg p-2 bg-gray-100'>
-          <Heading title='Bids' subtitle={''} />
-          {bids.map((bid) => (
-            <p key={bid.id}>
-              {bid.bidder} - {bid.amount}
-            </p>
-          ))}
-        </div>
+
+          <BidList user={user} auction={data}/>
+
 
       </div>
 
