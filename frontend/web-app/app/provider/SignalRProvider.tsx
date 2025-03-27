@@ -6,10 +6,12 @@ import React, { ReactNode, useCallback, useEffect, useRef } from 'react'
 
 import { useAuctionStore } from '../hooks/useAuctionStore'
 import { useBidStore } from '../hooks/useBidStore'
-import { Auction, Bid } from '../types'
+import { Auction, AuctionFinished, Bid } from '../types'
 import { User } from 'next-auth'
 import toast from 'react-hot-toast'
 import AuctionCreatedToast from '../components/AuctionCreatedToast'
+import { getDetailedViewData } from '../actions/auctionActions'
+import AuctionFinishedToast from '../components/AuctionFinishedToast'
 
 type Props = {
     children: ReactNode
@@ -41,6 +43,21 @@ export default function SignalRProvider({ children, user }: Props) {
         }
     }, [user?.username])
 
+
+    const handleAuctionFinished = useCallback((finishedAuction: AuctionFinished) => {
+        const auction = getDetailedViewData(finishedAuction.auctionId);
+        return toast.promise(auction, {
+            loading: 'Loading',
+            success: (auction) => 
+                <AuctionFinishedToast 
+                    auction={auction} 
+                    finishedAuction={finishedAuction}
+                />,
+            error: (err) => 'Auction finished'
+        }, {success: {duration: 10000, icon: null}})
+    }, [])
+
+    
     useEffect(() => {
         if (!connection.current) {
             connection.current = new HubConnectionBuilder()
@@ -53,17 +70,19 @@ export default function SignalRProvider({ children, user }: Props) {
                 .catch(err => console.log(err));
         }
 
-        // listen to bid placed event
+        // listen to bid events
         connection.current.on('BidPlaced', handleBidPlaced);
         connection.current.on('AuctionCreated', handleAuctionCreated);
+        connection.current.on('AuctionFinished', handleAuctionFinished);
 
         return () => {
             // turn off the event listener when not current auction
             connection.current?.off('BidPlaced', handleBidPlaced);
             connection.current?.off('AuctionCreated', handleAuctionCreated);
+            connection.current?.off('AuctionFinished', handleAuctionFinished);
         }
 
-    }, [setCurrentPrice, handleBidPlaced, handleAuctionCreated])
+    }, [setCurrentPrice, handleBidPlaced, handleAuctionCreated, handleAuctionFinished])
 
     return (
         children
