@@ -36,11 +36,11 @@ RUN dotnet restore AuctionApp.sln
 # ----------------------------------------
 
 # Copy the actual source code files into the container.
-COPY src/AuctionService src/AuctionService
+COPY src/NotificationService src/NotificationService
 COPY src/Contracts src/Contracts
 
-# Set the working directory to the AuctionService project
-WORKDIR /app/src/AuctionService
+# Set the working directory to the NotificationService project
+WORKDIR /app/src/NotificationService
 
 # Build and publish the application in Release mode.
 # The output files will be stored in the `/app/src/out` directory.
@@ -61,4 +61,4 @@ WORKDIR /app
 COPY --from=build /app/src/out .
 
 # Set the default command to run the application when the container starts.
-ENTRYPOINT [ "dotnet", "AuctionService.dll" ]
+ENTRYPOINT [ "dotnet", "NotificationService.dll" ]
