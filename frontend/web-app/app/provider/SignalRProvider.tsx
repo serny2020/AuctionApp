@@ -6,13 +6,17 @@ import React, { ReactNode, useCallback, useEffect, useRef } from 'react'
 
 import { useAuctionStore } from '../hooks/useAuctionStore'
 import { useBidStore } from '../hooks/useBidStore'
-import { Bid } from '../types'
+import { Auction, Bid } from '../types'
+import { User } from 'next-auth'
+import toast from 'react-hot-toast'
+import AuctionCreatedToast from '../components/AuctionCreatedToast'
 
 type Props = {
     children: ReactNode
+    user: User | null
 }
 
-export default function SignalRProvider({ children }: Props) {
+export default function SignalRProvider({ children, user }: Props) {
     const connection = useRef<HubConnection | null>(null);
     const setCurrentPrice = useAuctionStore(state => state.setCurrentPrice);
     const addBid = useBidStore(state => state.addBid);
@@ -29,6 +33,14 @@ export default function SignalRProvider({ children }: Props) {
         }
     }, [setCurrentPrice, addBid, params.id])
 
+    const handleAuctionCreated = useCallback((auction: Auction) => {
+        if(user?.username !== auction.seller) {
+            return toast(<AuctionCreatedToast auction={auction} />, {
+                duration: 10000
+            })
+        }
+    }, [user?.username])
+
     useEffect(() => {
         if (!connection.current) {
             connection.current = new HubConnectionBuilder()
@@ -43,13 +55,15 @@ export default function SignalRProvider({ children }: Props) {
 
         // listen to bid placed event
         connection.current.on('BidPlaced', handleBidPlaced);
+        connection.current.on('AuctionCreated', handleAuctionCreated);
 
         return () => {
             // turn off the event listener when not current auction
             connection.current?.off('BidPlaced', handleBidPlaced);
+            connection.current?.off('AuctionCreated', handleAuctionCreated);
         }
 
-    }, [setCurrentPrice, handleBidPlaced])
+    }, [setCurrentPrice, handleBidPlaced, handleAuctionCreated])
 
     return (
         children
