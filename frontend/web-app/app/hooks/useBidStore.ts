@@ -9,7 +9,7 @@ import { Bid } from "../types"
  type Actions = {
      setBids: (bids: Bid[]) => void
      addBid: (bid: Bid) => void
-     setOpen: (value: boolean) => void;
+     setOpen: (value: boolean) => void; // store state from count down timer to determine if auction can be made
  }
  
  export const useBidStore = create<State & Actions>((set) => ({
