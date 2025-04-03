@@ -1,6 +1,6 @@
 import { auth } from "../auth";
 
-const baseUrl = 'http://localhost:6001/';
+const baseUrl = process.env.API_URL;
 
 async function get(url: string) {
     const requestOptions = {
@@ -14,7 +14,7 @@ async function get(url: string) {
 }
 
 
-async function post(url: string, body: {}) {
+async function post(url: string, body: Record<string, unknown>) {
     const requestOptions = {
         method: 'POST',
         headers: await getHeaders(),
@@ -25,7 +25,7 @@ async function post(url: string, body: {}) {
 }
 
 
-async function put(url: string, body: {}) {
+async function put(url: string, body: Record<string, unknown>) {
     const requestOptions = {
         method: 'PUT',
         headers: await getHeaders(),
@@ -46,7 +46,7 @@ async function del(url: string) {
 
 async function getHeaders() {
     const session = await auth();
-    const headers = { 'Content-type': 'application/json' } as any;
+    const headers: Record<string, string> = { 'Content-type': 'application/json' };
     if (session?.accessToken) {
         headers.Authorization = 'Bearer ' + session.accessToken
     }
@@ -61,6 +61,7 @@ async function handleResponse(response: Response) {
     let data;
      try {
          data = JSON.parse(text);
+     // eslint-disable-next-line @typescript-eslint/no-unused-vars
      } catch (error) {
          data = text;
      }
@@ -69,12 +70,12 @@ async function handleResponse(response: Response) {
         return data || response.statusText
         return data || response.statusText;
     } else {
-        const error = {
-            status: response.status,
-            message: typeof(data === 'string') ? data : response.statusText
-        }
-
-        return {error};
+        return {
+            error: {
+              status: response.status,
+              message: typeof data === 'string' ? data : response.statusText,
+            }
+          };
     }
 }
 

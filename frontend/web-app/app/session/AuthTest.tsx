@@ -5,6 +5,7 @@ import { updateAuctionTest } from '../actions/auctionActions'
 
 export default function AuthTest() {
   const [loading, setLoading] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [result, setResult] = useState<any>()
 
   function doUpdate() {

@@ -37,11 +37,12 @@ export default function BidList({ user, auction }: Props) {
 
     useEffect(() => {
         getBidsForAuction(auction.id)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .then((res: any) => {
                 if (res.error) {
-                    throw res.error
+                    throw res.error;
                 }
-                setBids(res as Bid[])
+                setBids(res as Bid[]);
             }).catch(err => {
                 toast.error(err.message)
             }).finally(() => setLoading(false))

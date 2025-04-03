@@ -10,7 +10,7 @@ type Props = {
     subtitle?: string
     showReset?: boolean
     showLogin?: boolean
-    callbackUrl?: boolean
+    callbackUrl?: string
 }
 
 export default function EmptyFilter({

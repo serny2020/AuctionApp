@@ -10,6 +10,7 @@ export async function getCurrentUser() {
 
     return session.user;
   } catch (error) {
+    console.error('Error fetching current user:', error);
     return null;
   }
 }

@@ -9,6 +9,7 @@ export type Auction = {
   seller: string
   winner?: string
   soldAmount: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   currentHighBid: any
   createdAt: string
   updatedAt: string

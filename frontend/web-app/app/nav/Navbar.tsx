@@ -4,7 +4,6 @@ import Search from './Search';
 import LoginButton from './LogInButton';
 import { getCurrentUser } from '../actions/authActions';
 import UserActions from './UserActions';
-import { use } from 'react';
 
 export default async function Navbar() {
   const user = await getCurrentUser();

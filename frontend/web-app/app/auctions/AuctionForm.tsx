@@ -32,19 +32,19 @@ export default function AuctionForm({ auction }: Props) {
       reset({ make, model, color, mileage, year });
     }
     setFocus('make');
-  }, [setFocus])
+  }, [setFocus, auction, reset])
 
   async function onSubmit(data: FieldValues) {
     // console.log(data);
     try {
-      let id = '';
+      // let id = '';
       let res;
       if (pathname === '/auctions/create') {
         res = await createAuction(data);
       } else {
         if (auction) {
           res = await updateAuction(data, auction.id);
-          id = auction.id;
+          // id = auction.id;
         }
       }
 
@@ -52,6 +52,7 @@ export default function AuctionForm({ auction }: Props) {
         throw res.error;
       }
       router.push(`/auctions/details/${res.id}`)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // console.log(error)
       toast.error(error.status + ' ' + error.message)

@@ -1,6 +1,5 @@
 'use server' // Ensure this always runs on the server side  
 import { FieldValues } from "react-hook-form";
-import { auth } from "../auth";
 import { fetchWrapper } from "../lib/fetchWrapper";
 import { Auction, Bid, PagedResult } from "../types";
 
